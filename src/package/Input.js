@@ -1,5 +1,6 @@
 import React from 'react';
 import FormContext from './contexts';
+import { validateField } from './utils';
 
 class Input extends React.Component {
 
@@ -31,8 +32,15 @@ class Input extends React.Component {
     }
 
     onChangeHanler(e) {
-        let { setValue } = this.context;
+        let { setValue, setError, fields, settings: {instantValidate} } = this.context;
+        let fieldObj = fields[e.target.name];
+        let fieldName = e.target.name;
+        let fieldValue = e.target.value;
         setValue(e);
+        if(instantValidate) {
+            let error = validateField(fieldObj, fieldName, fieldValue).errors;
+            setError(error);
+        }
     }
 
     render() {
@@ -42,7 +50,7 @@ class Input extends React.Component {
                 {(context) => {
                     let { values, errors } = context;
                     return (
-                        <React.Fragment>
+                        <>
                             <input
                                 type={type}
                                 placeholder={placeholder}
@@ -52,7 +60,7 @@ class Input extends React.Component {
                                 {...rest}
                             />
                             {errors[name] && <span className="error">{errors[name]}</span>}
-                        </React.Fragment>
+                        </>
                     )
                 }}
             </FormContext.Consumer>

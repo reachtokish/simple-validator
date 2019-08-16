@@ -19,6 +19,9 @@ This package will help to make forms validation easier than ever before.
  - isRequired
  - min:5
  - max:10
- - isExact:10
  - isEmail
  - isNumber
+ - isExact:10
+
+## Form settings
+ - instantValidate (default: false)
