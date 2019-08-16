@@ -7,7 +7,8 @@ class Wrapper extends React.Component {
     state = {
         fields: {},
         errors: {},
-        values: {}
+        values: {},
+        settings: {}
     }
 
     setField(field) {
@@ -35,13 +36,24 @@ class Wrapper extends React.Component {
         this.setState(state => ({
             ...state,
             errors: {
+                ...state.errors,
                 ...error
             }
         }))
     }
 
+    setSetting(setting) {
+        this.setState(state => ({
+            ...state,
+            settings: {
+                ...state.settings,
+                ...setting
+            }
+        }))
+    }
+
     render() {
-        let { fields, errors, values } = this.state;
+        let { fields, errors, values, settings } = this.state;
         return (
             <table width="100%" border="1" cellPadding="10" cellSpacing="0">
                 <tbody>
@@ -55,9 +67,11 @@ class Wrapper extends React.Component {
                                     fields,
                                     errors,
                                     values,
+                                    settings,
                                     setField: (field) => this.setField(field),
                                     setValue: (e) => this.setValue(e),
-                                    setError: (error) => this.setError(error)
+                                    setError: (error) => this.setError(error),
+                                    setSetting: (setting) => this.setSetting(setting)
                                 }}
                             >
                                 {this.props.children}

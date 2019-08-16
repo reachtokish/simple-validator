@@ -7,7 +7,9 @@ function App() {
     return (
         <div>
             <Wrapper>
-                <Form>
+                <Form
+                    instantValidate={true}
+                >
                     <label>Name</label><br />
                     <Input
                         type="text"

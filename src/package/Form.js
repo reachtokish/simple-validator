@@ -11,6 +11,14 @@ class Form extends React.Component {
         setError(validateResult.errors);
     }
 
+    componentDidMount() {
+        let { setSetting } = this.context;
+        let { instantValidate } = this.props;
+        setSetting({
+            instantValidate
+        })
+    }
+
     render() {
         return (
             <form
@@ -23,5 +31,9 @@ class Form extends React.Component {
 }
 
 Form.contextType = FormContext;
+
+Form.defaultProps = {
+    instantValidate: false
+}
 
 export default Form;
