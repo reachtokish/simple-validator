@@ -9,7 +9,7 @@ class App extends React.Component {
             <div>
                 <Wrapper>
                     <Form
-                        instantValidate={false}
+                        instantValidate={true}
                     >
                         <label>Name</label><br />
                         <Input

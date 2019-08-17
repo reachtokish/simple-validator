@@ -9,6 +9,7 @@ class Form extends React.Component {
         let { fields, values, setError } = this.context;
         let validateResult = validate(fields, values);
         setError(validateResult.errors);
+        console.log(validateResult);
     }
 
     componentDidMount() {

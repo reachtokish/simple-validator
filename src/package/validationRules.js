@@ -14,7 +14,7 @@ export const validations = {
         return EMAIL_REG.test(value);
     },
     isNumber: (value) => {
-        return !isNaN(parseInt(value));
+        return !isNaN(value);
     },
     isExact: (value, exactLength) => {
         return value.length === parseInt(exactLength);

@@ -1,8 +1,6 @@
 import { errorMessages } from './const';
 import { validations } from './validationRules';
 
-const EMAIL_REG = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
-
 export const validate = (fields, values) => {
     let toReturn = {
         errors: {},
@@ -38,70 +36,16 @@ export const validateField = (fieldObj, fieldName, fieldValue) => {
         let validateTo = validator.includes(":") ? validator.split(":")[1] : null;
         let validationResult = validateTo ? validations[validationName](fieldValue, validateTo) : validations[validationName](fieldValue);
 
-        
-
         if(!validationResult) {
             toReturn = {
                 errors: {
-                    [fieldName]: "Error in above field: " + validationName
+                    [fieldName]: errorMessages[validationName]
                 }
             }
             break;
         }
 
     }
-
-    // for(let validator of validators) {
-    //     if(validator === "isRequired" && fieldValue === "") {
-    //         toReturn = {
-    //             errors: {
-    //                 [fieldName]: errorMessages[validator]
-    //             }
-    //         }
-    //         break;
-    //     }
-    //     else if(validator.split(":")[0] === "min" && fieldValue.length < parseInt(validator.split(":")[1])) {
-    //         toReturn = {
-    //             errors: {
-    //                 [fieldName]: errorMessages[validator.split(":")[0]]
-    //             }
-    //         }
-    //         break;
-    //     }
-    //     else if(validator.split(":")[0] === "max" && fieldValue.length > parseInt(validator.split(":")[1])) {
-    //         toReturn = {
-    //             errors: {
-    //                 [fieldName]: errorMessages[validator.split(":")[0]]
-    //             }
-    //         }
-    //         break;
-    //     }
-    //     else if(validator === "isEmail" && !EMAIL_REG.test(fieldValue)) {
-    //         toReturn = {
-    //             errors: {
-    //                 [fieldName]: errorMessages[validator]
-    //             }
-    //         }
-    //         break;
-    //     }
-    //     else if(validator === "isNumber" && isNaN(fieldValue)) {
-    //         toReturn = {
-    //             errors: {
-    //                 [fieldName]: errorMessages[validator]
-    //             }
-    //         }
-    //         break;
-    //     }
-    //     else if(validator.split(":")[0] === "isExact" && fieldValue.length !== parseInt(validator.split(":")[1])) {
-    //         toReturn = {
-    //             errors: {
-    //                 [fieldName]: errorMessages[validator.split(":")[0]]
-    //             }
-    //         }
-    //         break;
-    //     }
-    // }
-
-    console.log(toReturn);
+    
     return toReturn;
 }
