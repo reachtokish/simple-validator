@@ -18,5 +18,8 @@ export const validations = {
     },
     isExact: (value, exactLength) => {
         return value.length === parseInt(exactLength);
+    },
+    isChecked: (value) => {
+        return value !== false;
     }
 };

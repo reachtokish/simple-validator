@@ -2,7 +2,9 @@ import React from 'react';
 import FormContext from './contexts';
 import { validateField } from './utils';
 
-class Input extends React.Component {
+class CheckInput extends React.Component {
+
+    inputRef = React.createRef();
 
     componentDidMount() {
         this.setField();
@@ -21,12 +23,13 @@ class Input extends React.Component {
     }
 
     setValue() {
+        let { current } = this.inputRef;
         let { name, value } = this.props;
         let { setValue } = this.context;
         let valueObj = {
             target: {
                 name,
-                value: value ? value : ""
+                value: current.checked
             }
         }
         setValue(valueObj);
@@ -37,15 +40,22 @@ class Input extends React.Component {
         let fieldObj = fields[e.target.name];
         let fieldName = e.target.name;
         let fieldValue = e.target.value;
-        setValue(e);
+        let checked = e.target.checked;
+        let value = {
+            target: {
+                name: fieldName,
+                value: checked
+            }
+        }
+        setValue(value);
         if(instantValidate) {
-            let error = validateField(fieldObj, fieldName, fieldValue).errors;
+            let error = validateField(fieldObj, fieldName, checked).errors;
             setError(error);
         }
     }
 
     render() {
-        let { type, placeholder, name, validators, value, ...rest} = this.props;
+        let { type, placeholder, name, validators, value, checked, ...rest} = this.props;
         return (
             <FormContext.Consumer>
                 {(context) => {
@@ -53,10 +63,11 @@ class Input extends React.Component {
                     return (
                         <>
                             <input
+                                ref={this.inputRef}
                                 type={type}
                                 placeholder={placeholder}
                                 name={name}
-                                value={values[name] || ""}
+                                checked={values[name] || ""}
                                 onChange={this.onChangeHandler.bind(this)}
                                 {...rest}
                             />
@@ -70,6 +81,6 @@ class Input extends React.Component {
     
 }
 
-Input.contextType = FormContext;
+CheckInput.contextType = FormContext;
 
-export default Input;
+export default CheckInput;

@@ -1,7 +1,7 @@
 * {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-input {
+.text_input {
     min-width: 300px;
     height: 35px;
     font-size: 14px;

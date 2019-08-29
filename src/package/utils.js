@@ -31,20 +31,40 @@ export const validateField = (fieldObj, fieldName, fieldValue) => {
         }
     };
 
-    for(let validator of validators) {
-        let validationName = validator.includes(":") ? validator.split(":")[0] : validator;
-        let validateTo = validator.includes(":") ? validator.split(":")[1] : null;
-        let validationResult = validateTo ? validations[validationName](fieldValue, validateTo) : validations[validationName](fieldValue);
-
-        if(!validationResult) {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validationName]
+    /**
+     * TODO:
+     * - [CHECKBOX] check place inside else for loop
+     */
+    if(fieldObj.type === "checkbox") {
+        for(let validator of validators) {
+            let validationResult = validations[validator](fieldValue);
+            let validationName = validator;
+            if(!validationResult) {
+                toReturn = {
+                    errors: {
+                        [fieldName]: errorMessages[validationName]
+                    }
                 }
+                break;
             }
-            break;
         }
-
+    }
+    else {
+        for(let validator of validators) {
+            let validationName = validator.includes(":") ? validator.split(":")[0] : validator;
+            let validateTo = validator.includes(":") ? validator.split(":")[1] : null;
+            let validationResult = validateTo ? 
+                validations[validationName](fieldValue, validateTo) : 
+                validations[validationName](fieldValue);
+            if(!validationResult) {
+                toReturn = {
+                    errors: {
+                        [fieldName]: errorMessages[validationName]
+                    }
+                }
+                break;
+            }
+        }
     }
     
     return toReturn;
