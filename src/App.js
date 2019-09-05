@@ -2,46 +2,48 @@ import React from 'react';
 import Form from './package/Form';
 import Input from './package/Input';
 import Wrapper from './package/wrapper';
-import CheckInput from './package/CheckInput';
-import RadioInput from './package/RadioInput';
+import CheckBox from './package/checkBox';
+import RadioBox from './package/radioBox';
+import Textarea from './package/textarea';
+import Select from './package/select';
 
 class App extends React.Component {
     render() {
         return (
             <div>
-                {/**
-                * TODO:
-                * - [WRAPPER] need to be removed and place context somewhere inside
-                *   form or introduce higher order component
-                */}
                 <Wrapper>
                     <Form
                         instantValidate={true}
                     >
-                        {/* <label>Gender</label><br />
-                        <label htmlFor="male">Male</label>
-                        <RadioInput
-                            id="male"
+                        <label>Check one of me if you can</label><br />
+                        <RadioBox
                             type="radio"
-                            name="myRadio"
-                            value="male"
-                        />
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label htmlFor="female">Female</label>
-                        <RadioInput
-                            id="female"
-                            type="radio"
-                            name="myRadio"
-                            value="female"
-                        />
-                        <br /><br /> */}
-                        <label>My checkbox</label><br />
-                        <CheckInput
+                            name="checkOneOfMe"
+                            validators={['isRequired']}
+                            value="One"
+                            id="one"
+                            data={
+                                [{
+                                    id: 1,
+                                    title: "One",
+                                    value: "one"
+                                }, {
+                                    id: 2,
+                                    title: "Two",
+                                    value: "two"
+                                }, {
+                                    id: 3,
+                                    title: "Three",
+                                    value: "three"
+                                }]
+                            }
+                        /><br /><br />
+                        <label>Check me if you can</label><br />
+                        <CheckBox
                             type="checkbox"
-                            name="myCheckbox"
+                            name="checkMe"
                             validators={['isChecked']}
-                        />
-                        <br /><br />
+                        /><br /><br />
                         <label>Name</label><br />
                         <Input
                             type="text"
@@ -49,7 +51,6 @@ class App extends React.Component {
                             className="text_input"
                             name="name"
                             validators={['isRequired', 'min:5']}
-                            value="Kishore"
                         /><br /><br />
                         <label>Email</label><br />
                         <Input
@@ -66,6 +67,31 @@ class App extends React.Component {
                             className="text_input"
                             name="phoneNo"
                             validators={['isRequired', 'isExact:10', 'isNumber']}
+                        /><br /><br />
+                        <label>Phone No.</label><br />
+                        <Textarea
+                            type="text"
+                            placeholder="Enter Message"
+                            className="textarea_input"
+                            name="message"
+                            validators={['isRequired']}
+                        /><br /><br />
+                        <label>Gender</label><br />
+                        <Select
+                            type="select"
+                            placeholder="Choose gender"
+                            className="text_input"
+                            name="gender"
+                            validators={['isRequired']}
+                            options={
+                                [{
+                                    id: 1,
+                                    value: "Female"
+                                }, {
+                                    id: 2,
+                                    value: "Male"
+                                }]
+                            }
                         /><br /><br />
                         <button>Submit</button>
                     </Form>

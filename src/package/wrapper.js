@@ -3,7 +3,6 @@ import FormContext from './contexts';
 
 class Wrapper extends React.Component {
 
-    // states for whole app
     state = {
         fields: {},
         errors: {},

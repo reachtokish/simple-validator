@@ -21,3 +21,10 @@ button {
     margin-top: 3px;
     color: red;
 }
+textarea {
+    min-width: 300px;
+    height: 100px;
+    font-size: 14px;
+    border: solid 1px #ddd;
+    padding: 10px;
+}

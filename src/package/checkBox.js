@@ -2,9 +2,7 @@ import React from 'react';
 import FormContext from './contexts';
 import { validateField } from './utils';
 
-class CheckInput extends React.Component {
-
-    inputRef = React.createRef();
+class CheckBox extends React.Component {
 
     componentDidMount() {
         this.setField();
@@ -12,7 +10,7 @@ class CheckInput extends React.Component {
     }
 
     setField() {
-        let { name, validators, type } = this.props;
+        let { name, type, validators } = this.props;
         let field = {
             [name]: {
                 validators: validators,
@@ -23,13 +21,12 @@ class CheckInput extends React.Component {
     }
 
     setValue() {
-        let { current } = this.inputRef;
-        let { name, value } = this.props;
+        let { name, checked } = this.props;
         let { setValue } = this.context;
         let valueObj = {
             target: {
                 name,
-                value: current.checked
+                value: checked ? checked : false
             }
         }
         setValue(valueObj);
@@ -39,23 +36,21 @@ class CheckInput extends React.Component {
         let { setValue, setError, fields, settings: {instantValidate} } = this.context;
         let fieldObj = fields[e.target.name];
         let fieldName = e.target.name;
-        let fieldValue = e.target.value;
-        let checked = e.target.checked;
-        let value = {
+        let fieldValue = e.target.checked;
+        setValue({
             target: {
-                name: fieldName,
-                value: checked
+                value: fieldValue,
+                name: fieldName
             }
-        }
-        setValue(value);
+        });
         if(instantValidate) {
-            let error = validateField(fieldObj, fieldName, checked).errors;
+            let error = validateField(fieldObj, fieldName, fieldValue).errors;
             setError(error);
         }
     }
-
+    
     render() {
-        let { type, placeholder, name, validators, value, checked, ...rest} = this.props;
+        let { type, placeholder, name, validators, checked, ...rest} = this.props;
         return (
             <FormContext.Consumer>
                 {(context) => {
@@ -63,24 +58,21 @@ class CheckInput extends React.Component {
                     return (
                         <>
                             <input
-                                ref={this.inputRef}
-                                type={type}
-                                placeholder={placeholder}
+                                type="checkbox"
+                                checked={values[name] || false}
                                 name={name}
-                                checked={values[name] || ""}
                                 onChange={this.onChangeHandler.bind(this)}
-                                {...rest}
                             />
                             {errors[name] && <span className="error">{errors[name]}</span>}
                         </>
                     )
                 }}
             </FormContext.Consumer>
-        );
+        )
     }
-    
+
 }
 
-CheckInput.contextType = FormContext;
+CheckBox.contextType = FormContext;
 
-export default CheckInput;
+export default CheckBox;
