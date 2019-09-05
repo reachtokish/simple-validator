@@ -1,6 +1,5 @@
 import { errorMessages } from './const';
-
-const EMAIL_REG = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
+import { validations } from './validationRules';
 
 export const validate = (fields, values) => {
     let toReturn = {
@@ -31,55 +30,42 @@ export const validateField = (fieldObj, fieldName, fieldValue) => {
             [fieldName]: ""
         }
     };
-    for(let validator of validators) {
-        if(validator === "isRequired" && fieldValue === "") {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validator]
+
+    /**
+     * TODO:
+     * - [CHECKBOX] check place inside else for loop
+     */
+    if(fieldObj.type === "checkbox") {
+        for(let validator of validators) {
+            let validationResult = validations[validator](fieldValue);
+            let validationName = validator;
+            if(!validationResult) {
+                toReturn = {
+                    errors: {
+                        [fieldName]: errorMessages[validationName]
+                    }
                 }
+                break;
             }
-            break;
-        }
-        else if(validator.split(":")[0] === "min" && fieldValue.length < parseInt(validator.split(":")[1])) {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validator.split(":")[0]]
-                }
-            }
-            break;
-        }
-        else if(validator.split(":")[0] === "max" && fieldValue.length > parseInt(validator.split(":")[1])) {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validator.split(":")[0]]
-                }
-            }
-            break;
-        }
-        else if(validator === "isEmail" && !EMAIL_REG.test(fieldValue)) {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validator]
-                }
-            }
-            break;
-        }
-        else if(validator === "isNumber" && isNaN(fieldValue)) {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validator]
-                }
-            }
-            break;
-        }
-        else if(validator.split(":")[0] === "isExact" && fieldValue.length !== parseInt(validator.split(":")[1])) {
-            toReturn = {
-                errors: {
-                    [fieldName]: errorMessages[validator.split(":")[0]]
-                }
-            }
-            break;
         }
     }
+    else {
+        for(let validator of validators) {
+            let validationName = validator.includes(":") ? validator.split(":")[0] : validator;
+            let validateTo = validator.includes(":") ? validator.split(":")[1] : null;
+            let validationResult = validateTo ? 
+                validations[validationName](fieldValue, validateTo) : 
+                validations[validationName](fieldValue);
+            if(!validationResult) {
+                toReturn = {
+                    errors: {
+                        [fieldName]: errorMessages[validationName]
+                    }
+                }
+                break;
+            }
+        }
+    }
+    
     return toReturn;
 }

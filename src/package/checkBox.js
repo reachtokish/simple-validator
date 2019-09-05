@@ -2,7 +2,7 @@ import React from 'react';
 import FormContext from './contexts';
 import { validateField } from './utils';
 
-class Input extends React.Component {
+class CheckBox extends React.Component {
 
     componentDidMount() {
         this.setField();
@@ -10,7 +10,7 @@ class Input extends React.Component {
     }
 
     setField() {
-        let { name, validators, type } = this.props;
+        let { name, type, validators } = this.props;
         let field = {
             [name]: {
                 validators: validators,
@@ -21,12 +21,12 @@ class Input extends React.Component {
     }
 
     setValue() {
-        let { name, value } = this.props;
+        let { name, checked } = this.props;
         let { setValue } = this.context;
         let valueObj = {
             target: {
                 name,
-                value: value ? value : ""
+                value: checked ? checked : false
             }
         }
         setValue(valueObj);
@@ -36,16 +36,21 @@ class Input extends React.Component {
         let { setValue, setError, fields, settings: {instantValidate} } = this.context;
         let fieldObj = fields[e.target.name];
         let fieldName = e.target.name;
-        let fieldValue = e.target.value;
-        setValue(e);
+        let fieldValue = e.target.checked;
+        setValue({
+            target: {
+                value: fieldValue,
+                name: fieldName
+            }
+        });
         if(instantValidate) {
             let error = validateField(fieldObj, fieldName, fieldValue).errors;
             setError(error);
         }
     }
-
+    
     render() {
-        let { type, placeholder, name, validators, value, ...rest} = this.props;
+        let { type, placeholder, name, validators, checked, ...rest} = this.props;
         return (
             <FormContext.Consumer>
                 {(context) => {
@@ -53,23 +58,21 @@ class Input extends React.Component {
                     return (
                         <>
                             <input
-                                type={type}
-                                placeholder={placeholder}
+                                type="checkbox"
+                                checked={values[name] || false}
                                 name={name}
-                                value={values[name] || ""}
                                 onChange={this.onChangeHandler.bind(this)}
-                                {...rest}
                             />
                             {errors[name] && <span className="error">{errors[name]}</span>}
                         </>
                     )
                 }}
             </FormContext.Consumer>
-        );
+        )
     }
-    
+
 }
 
-Input.contextType = FormContext;
+CheckBox.contextType = FormContext;
 
-export default Input;
+export default CheckBox;

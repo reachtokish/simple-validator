@@ -2,7 +2,7 @@ import React from 'react';
 import FormContext from './contexts';
 import { validateField } from './utils';
 
-class Input extends React.Component {
+class Textarea extends React.Component {
 
     componentDidMount() {
         this.setField();
@@ -52,14 +52,14 @@ class Input extends React.Component {
                     let { values, errors } = context;
                     return (
                         <>
-                            <input
+                            <textarea
                                 type={type}
                                 placeholder={placeholder}
                                 name={name}
                                 value={values[name] || ""}
                                 onChange={this.onChangeHandler.bind(this)}
                                 {...rest}
-                            />
+                            ></textarea>
                             {errors[name] && <span className="error">{errors[name]}</span>}
                         </>
                     )
@@ -70,6 +70,6 @@ class Input extends React.Component {
     
 }
 
-Input.contextType = FormContext;
+Textarea.contextType = FormContext;
 
-export default Input;
+export default Textarea;

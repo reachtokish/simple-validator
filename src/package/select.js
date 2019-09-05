@@ -2,7 +2,7 @@ import React from 'react';
 import FormContext from './contexts';
 import { validateField } from './utils';
 
-class Input extends React.Component {
+class Select extends React.Component {
 
     componentDidMount() {
         this.setField();
@@ -45,21 +45,25 @@ class Input extends React.Component {
     }
 
     render() {
-        let { type, placeholder, name, validators, value, ...rest} = this.props;
+        let { type, placeholder, name, validators, value, options, ...rest} = this.props;
         return (
             <FormContext.Consumer>
                 {(context) => {
                     let { values, errors } = context;
                     return (
                         <>
-                            <input
+                            <select
                                 type={type}
-                                placeholder={placeholder}
                                 name={name}
                                 value={values[name] || ""}
                                 onChange={this.onChangeHandler.bind(this)}
                                 {...rest}
-                            />
+                            >
+                                <option>{placeholder}</option>
+                                {options && options.map(el => (
+                                    <option key={el.id}>{el.value}</option>
+                                ))}
+                            </select>
                             {errors[name] && <span className="error">{errors[name]}</span>}
                         </>
                     )
@@ -70,6 +74,6 @@ class Input extends React.Component {
     
 }
 
-Input.contextType = FormContext;
+Select.contextType = FormContext;
 
-export default Input;
+export default Select;

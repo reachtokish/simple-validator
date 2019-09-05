@@ -2,7 +2,7 @@ import React from 'react';
 import FormContext from './contexts';
 import { validateField } from './utils';
 
-class Input extends React.Component {
+class RadioBox extends React.Component {
 
     componentDidMount() {
         this.setField();
@@ -10,7 +10,7 @@ class Input extends React.Component {
     }
 
     setField() {
-        let { name, validators, type } = this.props;
+        let { name, type, validators } = this.props;
         let field = {
             [name]: {
                 validators: validators,
@@ -21,12 +21,12 @@ class Input extends React.Component {
     }
 
     setValue() {
-        let { name, value } = this.props;
+        let { name, value, checked } = this.props;
         let { setValue } = this.context;
         let valueObj = {
             target: {
                 name,
-                value: value ? value : ""
+                value: checked ? value : ""
             }
         }
         setValue(valueObj);
@@ -34,6 +34,7 @@ class Input extends React.Component {
 
     onChangeHandler(e) {
         let { setValue, setError, fields, settings: {instantValidate} } = this.context;
+        let { value } = this.props;
         let fieldObj = fields[e.target.name];
         let fieldName = e.target.name;
         let fieldValue = e.target.value;
@@ -43,33 +44,37 @@ class Input extends React.Component {
             setError(error);
         }
     }
-
+    
     render() {
-        let { type, placeholder, name, validators, value, ...rest} = this.props;
+        let { type, placeholder, name, validators, checked, value, id, data, ...rest} = this.props;
         return (
             <FormContext.Consumer>
                 {(context) => {
                     let { values, errors } = context;
                     return (
                         <>
-                            <input
-                                type={type}
-                                placeholder={placeholder}
-                                name={name}
-                                value={values[name] || ""}
-                                onChange={this.onChangeHandler.bind(this)}
-                                {...rest}
-                            />
+                            {data.map(el => (
+                                <React.Fragment key={el.id}>
+                                    <input
+                                        type="radio"
+                                        name={name}
+                                        id={"rad" + el.id}
+                                        value={el.value}
+                                        onChange={this.onChangeHandler.bind(this)}
+                                    />
+                                    <label htmlFor={"rad" + el.id}>{el.title}</label>
+                                </React.Fragment>
+                            ))}
                             {errors[name] && <span className="error">{errors[name]}</span>}
                         </>
                     )
                 }}
             </FormContext.Consumer>
-        );
+        )
     }
-    
+
 }
 
-Input.contextType = FormContext;
+RadioBox.contextType = FormContext;
 
-export default Input;
+export default RadioBox;

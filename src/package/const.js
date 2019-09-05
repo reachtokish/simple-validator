@@ -10,6 +10,8 @@ export const errorMessages = {
     
     isEmail: "Email Failed",
     
-    isNumber: "Should be number"
+    isNumber: "Should be number",
+
+    isChecked: "Should be checked",
     
 }

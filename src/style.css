@@ -1,7 +1,7 @@
 * {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-input {
+.text_input {
     min-width: 300px;
     height: 35px;
     font-size: 14px;
@@ -20,4 +20,11 @@ button {
     display: block;
     margin-top: 3px;
     color: red;
+}
+textarea {
+    min-width: 300px;
+    height: 100px;
+    font-size: 14px;
+    border: solid 1px #ddd;
+    padding: 10px;
 }
